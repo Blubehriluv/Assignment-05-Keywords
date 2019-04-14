@@ -25,7 +25,8 @@ void play()
 		}
 		else
 		{
-			cout << "That ain't it chief.";
+			cout << "That ain't it chief." << endl;
+			cout << "Guess again: " << endl;
 		}
 
 		cin >> guess;
@@ -82,7 +83,7 @@ int main()
 	jumble = theWord; //jumbled version of word
 	int length = jumble.size();
 
-	for (int i = 0; i < length; i++)
+	for (int i = 0; i < length; ++i)
 	{
 		int index1 = (rand() % length);
 		int index2 = (rand() % length);
