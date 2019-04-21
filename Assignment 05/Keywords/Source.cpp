@@ -1,68 +1,15 @@
 #include <iostream>
-#include <ctime>
-#include <cstdlib>
 #include <string>
-
+#include <cstdlib>
+#include <ctime>
 using namespace std;
 
-string jumble;
-string theWord;
-string theHint;
-int winCount = 0;
-string decide;
 
-void play()
-{
-	cout << "Unscramble: " << jumble << endl;
-	string guess;
-	cin >> guess;
-	
-	while ((guess != theWord) && (guess != "quit"))
-	{
-		if (guess == "hint")
-		{
-			cout << theHint << "\n";
-		}
-		else
-		{
-			cout << "That ain't it chief." << endl;
-			cout << "Guess again: " << endl;
-		}
-
-		cin >> guess;
-	}
-	if (guess == theWord)
-	{
-		cout << "\nCorrect!" << endl;
-		if (winCount != 2)
-		{
-			winCount++;
-			system("pause");
-			play();
-		}
-		else
-		{
-			cout << "Would you like to play again? [y/n]" << endl;
-			cin >> decide;
-			if (decide == "y")
-			{
-				winCount = 0;
-				play();
-			}
-			if (decide == "n")
-			{
-				cout << "Goodbye" << endl;
-			}
-		}
-	}
-}
-
-int main()
-{
-	enum fields {WORD, HINT, NUM_FIELDS};
+int main() {
+	// create word list to pull from
 	const int NUM_WORDS = 10;
-	const string WORDS[NUM_WORDS][NUM_FIELDS] =
-	{
+	enum fields { WORD, HINT, NUM_FIELDS };
+	string wordBank[NUM_WORDS][NUM_FIELDS] = {
 		{"mouse", "one kind of this clicks, while the other likes cheese"},//1
 		{"music", "a sound containing rhythm, found on the radio"},//2
 		{"refrigerator", "keeps our food cold"},//3
@@ -75,25 +22,84 @@ int main()
 		{"spaghetti", "there's vomit on his sweater already, mom's..."},//10
 	};
 
-	srand(static_cast<unsigned int>(time(0)));
-	int choice = (rand() % NUM_WORDS);
-	theWord = WORDS[choice][WORD]; //word to guess
-	theHint = WORDS[choice][HINT]; //hint for word
+	/*
+	instructions
+	*/
+	cout << "CODE DECRYPTION PROGRAM INITIALIZING... " << endl;
+	cout << "Unscramble [3] words to proceed." << endl;
+	cout << "Type 'hint' if you need help.\n\n";
 
-	jumble = theWord; //jumbled version of word
-	int length = jumble.size();
 
-	for (int i = 0; i < length; ++i)
-	{
-		int index1 = (rand() % length);
-		int index2 = (rand() % length);
-		char temp = jumble[index1];
-		jumble[index1] = jumble[index2];
-		jumble[index2] = temp;
+	/*
+	select 3 of 10 words and scramble
+	*/
+	int totalAttempts = 0;
+	int incorrectGuesses = 0;
+
+	for (int i = 0; i < 3; i++) {
+		// reset incorrect guess counter
+		incorrectGuesses = 0;
+
+		// seed random
+		srand(static_cast<unsigned int>(time(0)));
+
+		// choose a word
+		int choice = rand() % NUM_WORDS;
+		string theWord = wordBank[choice][WORD];
+		string theHint = wordBank[choice][HINT];
+
+		string jumbledWord = theWord;
+
+		// jumble the word
+		for (int j = 0; j < jumbledWord.length(); j++) {
+			// select 2 random index
+			int index1 = rand() % jumbledWord.length();
+			int index2 = rand() % jumbledWord.length();
+
+			// swap characters at both index
+			char buffer = jumbledWord[index1];
+			jumbledWord[index1] = jumbledWord[index2];
+			jumbledWord[index2] = buffer;
+		}
+
+		cout << "Unscramble: " << jumbledWord << endl << endl;
+
+		// player interaction loop
+		string playerGuess = "";
+		while (playerGuess != theWord) {
+			// every 3 wrong guesses, offer help
+			if ((incorrectGuesses % 3 == 0) && (incorrectGuesses > 0)) {
+				cout << "---Stuck?? Enter 'hint'---\n";
+			}
+
+			totalAttempts++;
+
+			// get players guess
+			cout << "Your guess: ";
+			cin >> playerGuess;
+
+			// display hint
+			if (playerGuess == "hint") {
+				// reset incorrect guess counter
+				incorrectGuesses = 0;
+				cout << theHint << endl << endl;
+			}
+			// let player know if they're wrong
+			else if (playerGuess != theWord) {
+				incorrectGuesses++;
+				cout << "Incorrect!\n\n";
+			}
+		}
+		cout << "You got it! Nice!\n\n";
 	}
 
-	if (winCount != 3)
-	{
-		play();
-	}
+	/*
+	end stats
+	*/
+	cout << "-----COMPLETE-----\n\n";
+	cout << "Total attempts: " << totalAttempts << endl << endl;
+
+	cout << "------------------\n\n";
+
+	return 0;
 }

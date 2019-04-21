@@ -1,3 +1,2 @@
 ﻿  Source.cpp
-c:\users\taymcken\documents\github\assignment-05-keywords\assignment 05\keywords\source.cpp(32): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
   Keywords.vcxproj -> C:\Users\taymcken\Documents\GitHub\Assignment-05-Keywords\Assignment 05\x64\Debug\Keywords.exe
