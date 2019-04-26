@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <ctime>
 using namespace std;
-
+int correctGuess;
 
 int main() {
 	// create word list to pull from
@@ -90,7 +90,17 @@ int main() {
 				cout << "Incorrect!\n\n";
 			}
 		}
+		//Counter for the player's correct guesses
+		correctGuess++;
 		cout << "You got it! Nice!\n\n";
+		cout << "You've guessed correctly " << correctGuess << " times!" << endl;
+
+		//When the guesses equal 3, the player wins
+		if (correctGuess == 3)
+		{
+			cout << "You win!" << endl;
+			system("Pause");
+		}
 	}
 
 	/*
